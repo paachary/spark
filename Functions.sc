@@ -16,6 +16,8 @@ def findAsciiLambda(char :Char, f : Char => Int) : Int = {
   f(char)
 }
 
+findAsciiLambda('f', findAscii)
+
 findAsciiLambda('d', char => {
   val x : Int = char.toInt; x
 })
@@ -39,9 +41,24 @@ def convertToUpper(string: String) : String = {
   convertedString
 }
 
-var string : String = "I am Prashant"
-println(convertToUpper(string))
+/*
+-------------------------------------------------------------------
+*/
 
+def convertToLower(string: String) : String = {
+  var convertedString: String = ""
+  for ( i <- 0 to string.length-1) {
+
+    //65 and 90
+
+    if ( string(i).toInt >= 65 && string(i).toInt <= 90) {
+      convertedString = convertedString+""+(string(i).toInt+32).toChar
+    } else {
+      convertedString = convertedString + "" + string(i)
+    }
+  }
+  convertedString
+}
 
 /*
 -------------------------------------------------------------------
@@ -50,6 +67,10 @@ println(convertToUpper(string))
 def transformCase( string : String, f : String => String ) : String = {
   f(string)
 }
+
+var string : String = "I am Prashant"
+transformCase(string, convertToLower)
+transformCase(string, convertToUpper)
 
 transformCase("I am a very good engineer" ,
   convertedString  => {
