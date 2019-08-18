@@ -90,3 +90,21 @@ transformCase("I am a very good engineer" ,
 -------------------------------------------------------------------
 */
 
+// Fibonacci Series
+
+var prev_1 = 0
+var sum = 0
+var prev_2 = 1
+println(prev_1)
+println(prev_2)
+for (i <- 1 to 9) {
+  sum = prev_1 + prev_2
+  println(sum)
+  prev_1 = prev_2
+  prev_2 = sum
+}
+/*
+-------------------------------------------------------------------
+*/
+
+
