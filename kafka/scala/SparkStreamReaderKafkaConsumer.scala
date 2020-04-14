@@ -1,10 +1,15 @@
 package org.paachary.kafka.scala
 
-import org.apache.kafka.clients.consumer.ConsumerConfig
-import org.apache.spark.sql.SparkSession
+import java.util.concurrent.TimeUnit
+
+import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
+import org.apache.spark.sql.streaming.Trigger
 import org.slf4j.LoggerFactory
 
+case class FlightDetails(country : String, count: String)
+
 class SparkStreamReaderKafkaConsumer {
+
 
   def beginStreaming : Unit = {
 
@@ -21,16 +26,29 @@ class SparkStreamReaderKafkaConsumer {
       option("kafka.bootstrap.servers", constants.bootStrapServers).
       option("startingOffsets", "earliest").
       option("subscribe","tweet_topic").
-      load()
+      load().
+      selectExpr("CAST(key as STRING) as country", "CAST(value as String) as count")
 
-    aggregateTravelCount.
-      writeStream.
-      format("memory").
+    import spark.implicits._
+    val flightDetails = aggregateTravelCount.as[FlightDetails]
+
+    //aggregateTravelCount.
+    /*
+    flightDetails.writeStream.
+      format("console").
       queryName("tweet_output").
+      trigger(Trigger.Once).
       start().awaitTermination()
+      */
 
-    logger.info(aggregateTravelCount.take(100).mkString("\n"))
+     // This is for writing the stream into the elasticsearch sink
 
+     flightDetails.
+     writeStream.
+     //trigger(Trigger.ProcessingTime(5, TimeUnit.SECONDS)).
+     format("es").
+     option("checkpointLocation", "/tmp/checkpointLocation").
+     option("es.mapping.id", "country").start("flight/country").awaitTermination()
   }
 }
 

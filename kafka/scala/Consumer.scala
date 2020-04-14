@@ -15,32 +15,33 @@ class Consumer {
 
   def readFromKafka( topic : String) : Unit = {
 
-   val log = LoggerFactory.getLogger(classOf[Consumer])
+    val log = LoggerFactory.getLogger(classOf[Consumer])
 
     val constants = new Constants
     val props = constants.props
 
-    props.put(ConsumerConfig.GROUP_ID_CONFIG , consumerGroupId)
+    props.put(
+      ConsumerConfig.GROUP_ID_CONFIG, consumerGroupId)
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest")
 
     val consumer = new KafkaConsumer[String, String](props)
 
     consumer.subscribe(util.Arrays.asList(topic)) //multiple topics
 
-    while(true) {
+    while (true) {
       val record = consumer.poll(1000).asScala
-      for (data <- record.iterator)
-        log.info(data.key() + ":" +
-                data.value() + ":" +
+      for (data <- record.iterator) {
+        println(data.key() + ":" +
+          data.value() + ":" +
           data.offset() + ":" +
           data.partition())
-    }
-    Signal.handle(new Signal("INT"), new SignalHandler() {
-      def handle(sig: Signal) {
-        log.info("Encountered an interrupt. Exiting gracefully")
-        System.exit(0)
+
+        log.info(data.key() + ":" +
+          data.value() + ":" +
+          data.offset() + ":" +
+          data.partition())
       }
-    })
+    }
   }
 }
 
