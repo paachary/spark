@@ -16,7 +16,7 @@ create external table if not exists
 ratings (
 	user_id int, 
 	movie_id int,
-	rating double,
+	rating float,
 	time_stamp int )
 comment 'external table holding ratings data' 
 row format delimited 

@@ -1,0 +1,262 @@
+{
+  "paragraphs": [
+    {
+      "text": "%spark.conf\n\nSPARK_HOME /usr/local/spark-2.4.5-bin-hadoop2.7",
+      "user": "anonymous",
+      "dateUpdated": "2020-04-27 16:12:08.891",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1587954223541_434516449",
+      "id": "paragraph_1587954223541_434516449",
+      "dateCreated": "2020-04-27 07:53:43.541",
+      "dateStarted": "2020-04-27 16:12:08.905",
+      "dateFinished": "2020-04-27 16:12:08.921",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n\n// Ratings file\nval ratingsFile \u003d spark.read.option(\"header\",\"true\").option(\"inferSchema\",\"true\").csv(\"hdfs://localhost:9000/user/hadoop/data/ratings.csv\")\nratingsFile.printSchema\nratingsFile.createOrReplaceTempView(\"ratings\")\n\n//Movies file\nval moviesFile \u003d spark.read.option(\"header\", \"true\").option(\"inferSchema\",\"true\").csv(\"hdfs://localhost:9000/user/hadoop/data/movies.csv\")\nmoviesFile.printSchema\nmoviesFile.createOrReplaceTempView(\"movies\")\n\n/*\nspark.sql(\"select r.movieid, m.title, \"+\n\" avg(r.rating) \"+\n\" from ratings r INNER JOIN movies m \"+\n\" on m.movieid \u003d r.movieid \" +\n\" where m.movieid in (  select r1.movieid \"+\n                        \"from ratings r1 \"+\n                        \"group by r1.movieid having count(*) \u003e 10)  \"+\n  \"group by r.movieid, m.title \"+\n  \" order by avg(r.rating) desc\").collect()\n\n*/",
+      "user": "anonymous",
+      "dateUpdated": "2020-04-27 19:06:38.260",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "root\n |-- userId: integer (nullable \u003d true)\n |-- movieId: integer (nullable \u003d true)\n |-- rating: double (nullable \u003d true)\n |-- timestamp: integer (nullable \u003d true)\n\nroot\n |-- movieId: integer (nullable \u003d true)\n |-- title: string (nullable \u003d true)\n |-- genres: string (nullable \u003d true)\n\n\u001b[1m\u001b[34mratingsFile\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [userId: int, movieId: int ... 2 more fields]\n\u001b[1m\u001b[34mmoviesFile\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.DataFrame\u001b[0m \u003d [movieId: int, title: string ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1587954245123_-910959524",
+      "id": "paragraph_1587954245123_-910959524",
+      "dateCreated": "2020-04-27 07:54:05.123",
+      "dateStarted": "2020-04-27 19:06:38.262",
+      "dateFinished": "2020-04-27 19:06:46.390",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nratingsFile.where(\"movieid \u003d 95517\").agg(avg(\"rating\")).show(false)",
+      "user": "anonymous",
+      "dateUpdated": "2020-04-27 17:12:15.304",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-----------+\n|avg(rating)|\n+-----------+\n|4.9        |\n+-----------+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1587987363075_-1321205312",
+      "id": "paragraph_1587987363075_-1321205312",
+      "dateCreated": "2020-04-27 17:06:03.075",
+      "dateStarted": "2020-04-27 17:12:15.307",
+      "dateFinished": "2020-04-27 17:12:22.081",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nratingsFile.selectExpr(\"movieid\", \"rating\").groupBy(\"movieid\").agg(count(\"rating\").alias(\"cnt\"), avg(\"rating\").alias(\"avg\")).where(\" movieid \u003d 95517\").orderBy(desc(\"avg\")).show(20,false)",
+      "user": "anonymous",
+      "dateUpdated": "2020-04-27 18:29:33.695",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------+---+---+\n|movieid|cnt|avg|\n+-------+---+---+\n|95517  |5  |4.9|\n+-------+---+---+\n\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1587987479058_892945795",
+      "id": "paragraph_1587987479058_892945795",
+      "dateCreated": "2020-04-27 17:07:59.058",
+      "dateStarted": "2020-04-27 18:29:33.699",
+      "dateFinished": "2020-04-27 18:29:39.413",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nval ratingsWithFilter \u003d ratingsFile.selectExpr(\"movieid as ratingMovieId\", \"rating\").groupBy(\"ratingMovieId\").agg(count(\"rating\").alias(\"cnt\"), avg(\"rating\").alias(\"avg\")).where(\" cnt \u003e 10\").orderBy(desc(\"avg\"))",
+      "user": "anonymous",
+      "dateUpdated": "2020-04-27 19:26:20.115",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\u001b[1m\u001b[34mratingsWithFilter\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Dataset[org.apache.spark.sql.Row]\u001b[0m \u003d [ratingMovieId: int, cnt: bigint ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1587990940992_465894849",
+      "id": "paragraph_1587990940992_465894849",
+      "dateCreated": "2020-04-27 18:05:40.992",
+      "dateStarted": "2020-04-27 19:26:20.119",
+      "dateFinished": "2020-04-27 19:26:20.244",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\nval joinExpresession \u003d ratingsWithFilter.col(\"ratingMovieId\") \u003d\u003d\u003d moviesFile.col(\"movieid\")\nval joinType \u003d \"inner\"\n\nratingsWithFilter.select(\"ratingMovieId\",\"avg\").join(moviesFile.selectExpr(\"movieid\", \"title\"), joinExpresession, joinType).selectExpr(\"ratingMovieid\",\"title\",\"avg\").show(20,false)",
+      "user": "anonymous",
+      "dateUpdated": "2020-04-27 19:28:31.024",
+      "config": {
+        "colWidth": 12.0,
+        "fontSize": 9.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false,
+          "completionKey": "TAB",
+          "completionSupport": true
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "+-------------+--------------------------------------------+------------------+\n|ratingMovieid|title                                       |avg               |\n+-------------+--------------------------------------------+------------------+\n|171705       |Den radio (2001)                            |4.576923076923077 |\n|171011       |Planet Earth II (2016)                      |4.4865181711606095|\n|159817       |Planet Earth (2006)                         |4.458092485549133 |\n|318          |Shawshank Redemption, The (1994)            |4.424188001918387 |\n|170705       |Band of Brothers (2001)                     |4.399898373983739 |\n|191999       |The Reichenbach Fall (2012)                 |4.375             |\n|174053       |Black Mirror: White Christmas (2014)        |4.350558659217877 |\n|171495       |Cosmos                                      |4.343949044585988 |\n|172591       |The Godfather Trilogy: 1972-1990 (1992)     |4.339667458432304 |\n|858          |Godfather, The (1972)                       |4.332892749244713 |\n|168282       |George Carlin: Playin\u0027 with Your Head (1986)|4.3076923076923075|\n|142871       |O Pátio das Cantigas (1942)                 |4.3076923076923075|\n|88570        |Welfare (1975)                              |4.3076923076923075|\n|50           |Usual Suspects, The (1995)                  |4.291958829205532 |\n|174551       |Obsession (1965)                            |4.275             |\n|176601       |Black Mirror                                |4.263888888888889 |\n|1221         |Godfather: Part II, The (1974)              |4.2630353697749195|\n|172577       |Last Year\u0027s Snow Was Falling (1983)         |4.261904761904762 |\n|527          |Schindler\u0027s List (1993)                     |4.257501817775044 |\n|2019         |Seven Samurai (Shichinin no samurai) (1954) |4.2541157909178215|\n+-------------+--------------------------------------------+------------------+\nonly showing top 20 rows\n\n\u001b[1m\u001b[34mjoinExpresession\u001b[0m: \u001b[1m\u001b[32morg.apache.spark.sql.Column\u001b[0m \u003d (ratingMovieId \u003d movieid)\n\u001b[1m\u001b[34mjoinType\u001b[0m: \u001b[1m\u001b[32mString\u001b[0m \u003d inner\n"
+          }
+        ]
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1587993442306_-911401363",
+      "id": "paragraph_1587993442306_-911401363",
+      "dateCreated": "2020-04-27 18:47:22.306",
+      "dateStarted": "2020-04-27 19:28:31.025",
+      "dateFinished": "2020-04-27 19:28:38.834",
+      "status": "FINISHED"
+    },
+    {
+      "text": "%spark\n",
+      "user": "anonymous",
+      "dateUpdated": "2020-04-27 18:56:35.353",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1587993995353_2005808062",
+      "id": "paragraph_1587993995353_2005808062",
+      "dateCreated": "2020-04-27 18:56:35.353",
+      "status": "READY"
+    }
+  ],
+  "name": "SparkNotebook",
+  "id": "2F6YCQCHE",
+  "defaultInterpreterGroup": "spark",
+  "version": "0.9.0-preview1",
+  "noteParams": {},
+  "noteForms": {},
+  "angularObjects": {},
+  "config": {
+    "isZeppelinNotebookCronEnable": false,
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {}
+}
