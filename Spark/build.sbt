@@ -11,8 +11,6 @@ libraryDependencies += "org.apache.spark" %% "spark-core" % "2.4.5"
 libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.4.5"
 
 // https://mvnrepository.com/artifact/com.datastax.spark/spark-cassandra-connector
-libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "2.4.3"
+libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector" % "2.5.0"
 
-// https://mvnrepository.com/artifact/com.datastax.spark/spark-cassandra-connector-embedded
-libraryDependencies += "com.datastax.spark" %% "spark-cassandra-connector-embedded" % "2.4.3" % Test
 
