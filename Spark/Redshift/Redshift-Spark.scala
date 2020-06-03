@@ -1,4 +1,4 @@
- val output = spark.read.parquet("s3://prax-bucket/output")
+ val output = spark.read.parquet("s3://bucket/output")
 
  
  import org.apache.spark.sql.SaveMode
